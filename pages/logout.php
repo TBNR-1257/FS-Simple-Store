@@ -9,12 +9,12 @@
         logout();
 
         //redirect user back to index
-        header ('Location: /login.php');
+        header ('Location: /login');
         exit;
 
     } else {
         // redirect to login page
-        header('Location: /login.php');
+        header('Location: /login');
         exit;
     }
     
