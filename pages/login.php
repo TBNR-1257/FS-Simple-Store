@@ -2,10 +2,25 @@
 
   session_start();
 
+  // generate csrf token
+  // if no token is set, generate a new token
+  // when token is available, don't regenerate another token
+  if ( !isset($_SESSION['login_form_csrf_token'] ) ) 
+    $_SESSION['login_form_csrf_token'] = bin2hex( random_bytes(32) );
+
+
   require "includes/functions.php";
   require "includes/class-authentication.php";
 
+
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // verify if the csrf token is correct or not
+    if ( $_POST['login_form_csrf_token'] !== $_SESSION['login_form_csrf_token'])
+    {
+      die("Nice try, but I'm smarter than you!");
+    }
+    
 
     $email = $_POST["email"];
     $password = $_POST["password"];
@@ -58,6 +73,11 @@
                   Login
                 </button>
               </div>
+              <input 
+                type="hidden"
+                name="login_form_csrf_token"
+                value="<?php echo $_SESSION['login_form_csrf_token']; ?>"
+                />
             </form>
           </div>
         </div>
